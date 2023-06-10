@@ -14,15 +14,15 @@ export const App = () => {
     const { name } = event.target;
 
     if (name === 'good') {
-      return setGood(good + 1);
+      return setGood(prevGood => prevGood + 1);
     }
 
     if (name === 'neutral') {
-      return setNeutral(neutral + 1);
+      return setNeutral(prevNeutral => prevNeutral + 1);
     }
 
     if (name === 'bad') {
-      return setBad(bad + 1);
+      return setBad(prevBad => prevBad + 1);
     }
   };
 
