@@ -1,77 +1,68 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import FeedbackOptions from '../FeedbackOptions/FeedbackOptions';
 import Statistics from '../Statistics/Statistics';
 import Section from '../Section/Section';
 import { Card, Thumb, Text } from './App.styled';
 
-class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+export const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const options = ['good', 'neutral', 'bad'];
 
-  handleLeavFeedback = event => {
+  const handleLeavFeedback = event => {
     const { name } = event.target;
 
-    this.setState(prevState => ({
-      [name]: prevState[name] + 1,
-    }));
+    if (name === 'good') {
+      return setGood(good + 1);
+    }
+
+    if (name === 'neutral') {
+      return setNeutral(neutral + 1);
+    }
+
+    if (name === 'bad') {
+      return setBad(bad + 1);
+    }
   };
 
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
-
+  const countTotalFeedback = () => {
     const totalFeedback = good + neutral + bad;
     return totalFeedback;
   };
 
-  countPositiveFeedbackPercentage = () => {
-    const posiriveFeedback = Math.round(
-      (this.state.good * 100) / this.countTotalFeedback()
-    );
+  const countPositiveFeedbackPercentage = () => {
+    const posiriveFeedback = Math.round((good * 100) / countTotalFeedback());
     return posiriveFeedback;
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    const {
-      countTotalFeedback,
-      countPositiveFeedbackPercentage,
-      handleLeavFeedback,
-    } = this;
+  const totalFeedback = countTotalFeedback();
+  const positivePercentage = countPositiveFeedbackPercentage();
 
-    const options = ['good', 'neutral', 'bad'];
-    const totalFeedback = countTotalFeedback();
-    const positivePercentage = countPositiveFeedbackPercentage();
+  return (
+    <Card>
+      <Thumb>
+        <Section title={'Please leave feeback'}>
+          <FeedbackOptions
+            options={options}
+            onLeaveFeedback={handleLeavFeedback}
+          />
+        </Section>
 
-    return (
-      <Card>
-        <Thumb>
-          <Section title={'Please leave feeback'}>
-            <FeedbackOptions
-              options={options}
-              onLeaveFeedback={handleLeavFeedback}
+        {totalFeedback === 0 ? (
+          <Text>There is no feedback</Text>
+        ) : (
+          <Section title={'Statistics'}>
+            <Statistics
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              total={totalFeedback}
+              percentage={positivePercentage}
             />
           </Section>
-
-          {totalFeedback === 0 ? (
-            <Text>There is no feedback</Text>
-          ) : (
-            <Section title={'Statistics'}>
-              <Statistics
-                good={good}
-                neutral={neutral}
-                bad={bad}
-                total={totalFeedback}
-                percentage={positivePercentage}
-              />
-            </Section>
-          )}
-        </Thumb>
-      </Card>
-    );
-  }
-}
-
-export default App;
+        )}
+      </Thumb>
+    </Card>
+  );
+};
