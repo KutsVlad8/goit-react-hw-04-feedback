@@ -10,19 +10,24 @@ export const App = () => {
   const [bad, setBad] = useState(0);
   const options = ['good', 'neutral', 'bad'];
 
-  const handleLeavFeedback = event => {
+  const handleLeaveFeedback = event => {
     const { name } = event.target;
 
-    if (name === 'good') {
-      return setGood(prevGood => prevGood + 1);
-    }
+    switch (name) {
+      case 'good':
+        setGood(prevGood => prevGood + 1);
+        break;
 
-    if (name === 'neutral') {
-      return setNeutral(prevNeutral => prevNeutral + 1);
-    }
+      case 'neutral':
+        setNeutral(prevNeutral => prevNeutral + 1);
+        break;
 
-    if (name === 'bad') {
-      return setBad(prevBad => prevBad + 1);
+      case 'bad':
+        setBad(prevBad => prevBad + 1);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -45,7 +50,7 @@ export const App = () => {
         <Section title={'Please leave feeback'}>
           <FeedbackOptions
             options={options}
-            onLeaveFeedback={handleLeavFeedback}
+            onLeaveFeedback={handleLeaveFeedback}
           />
         </Section>
 
